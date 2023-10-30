@@ -1,25 +1,28 @@
-pragma solidity 0.8.9;
+pragma solidity 0.6.12;
 
-import "./Ed25519_mock.sol";
+import "./elliptic-curve-solidity/examples/Secp256k1.sol";
 
 contract Swap {
-  Ed25519 ed25519;
-	// the hash of the expected public key for which the secret `s_b` corresponds.
-	// this public key is a point on the ed25519 curve, and is in 33-byte compressed format (?)
-  bytes32 public pubKeyClaim;
+	Secp256k1 secp256k1;
 
-	// the hash of the expected public key for which the secret `s_a` corresponds.
-	// this public key is a point on the ed25519 curve, and is in 33-byte compressed format (?)
-	bytes32 public pubKeyRefund;
+	// the hash where the pre-image must be disclosed to redeem the eth
+	// in this contract.
+	// it is the keccak256 hash of Bob's secret (s_b), which when disclosed
+	// allows Alice, the contract creator to redeem funds on another chain.
+	bytes32 public hashRedeem;
 
-	// time period since contract creation,
-  // when a refund is allowed for Alice before she calls `ready`
-  // (i.e. before Bob locks judecoin)
-	uint256 timeout_0;
+	// the hash of the expected public key for which the secret s_b corresponds.
+	// this public key lies on the secp256k1 curve, and is in 33-byte compressed format.
+	bytes32 public expectedPublicKey;
 
-  // time period since calling `ready`,
-  // when a refund is allowed for Alice if Bob doesn't claim
-	uint256 timeout_1;
+	// the hash where the pre-image must be disclosed by the contract owner, Alice, after time
+	// `t` to refund the eth in this contract.
+	// it is the keccak256 hash of Alice's secret, which when disclosed 
+	// allows Bob to refund their coins on the other chain.
+	bytes32 public hashRefund;
+
+	// time after which a refund is allowed
+	uint256 timeout;
 
 	// contract creator, Alice
 	address payable owner;
@@ -28,54 +31,53 @@ contract Swap {
 	// this prevents Bob from withdrawing funds without locking funds on the other chain first
 	bool isReady = false;
 
-	event DerivedPubKeyClaim(uint256 s);
-	event DerivedPubKeyRefund(uint256 s);
+	event DerivedPubKeyRedeem(uint256 x, uint256 y);
 
 	constructor(
-		bytes32 _pubKeyClaim,
-		bytes32 _pubKeyRefund
-	) payable {
-      owner = payable(msg.sender);
-		pubKeyClaim = _pubKeyClaim;
-		pubKeyRefund = _pubKeyRefund;
-		timeout_0 = block.timestamp + 1 days; // TODO: make configurable
-    ed25519 = new Ed25519();
+		bytes32 _hashRedeem,
+		bytes32 _expectedPublicKey, 
+		bytes32 _hashRefund
+	) public payable {
+		owner = msg.sender;
+		hashRedeem = _hashRedeem;
+		expectedPublicKey = _expectedPublicKey;
+		hashRefund = _hashRefund;
+		timeout = now + 1 days; // TODO: make configurable
+		secp256k1 = new Secp256k1();
 	}
 
-	function set_ready() public {
+	function ready() public {
 		require(msg.sender == owner);
-		isReady = true;
-    timeout_1 = block.timestamp + 1 days; // TODO: make configurable
+		isReady = true; 
 	}
 
-	function claim(
+	function redeem(
 		uint256 _s
 	) public {
-      // Bob can claim either when:
-      // Alice never calls ready, and timeout_0 has passed, or
-      // Alice called ready and Bob is within timeframe timeout_1
-    require((block.timestamp <= timeout_1 && isReady == true) || block.timestamp >= timeout_0);
-		// confirm that provided secret `_s` was used to derive pubKeyClaim
-    (uint px, uint py) = ed25519.scalarMultBase(_s);
+		require(isReady == true, "contract is not ready!");
+
+		// // confirm that provided secret `_s` is pre-image of `hashRedeem`
+		// bytes32 h0 = keccak256(abi.encode(_s));
+		// require(h0 == hashRedeem, "pre-image for redeem was incorrect");
+
+		// confirm that secret corresponds to provided public key
+		(uint256 px, uint256 py) = secp256k1.derivePubKey(_s);
+		emit DerivedPubKeyRedeem(px, py);
 		bytes32 ph = keccak256(abi.encode(px, py));
-    require(ph == pubKeyClaim, "provided secret does not match the expected pubKey");
-		emit DerivedPubKeyClaim(_s);
+		require(ph == expectedPublicKey, "provided public key does not match expected");
 
 		// // send eth to caller
-		payable(msg.sender).transfer(address(this).balance);
+		// msg.sender.transfer(address(this).balance);
 	}
 
 	function refund(
 		uint256 _s
 	) public {
-      require((block.timestamp <= timeout_0 && isReady == false) || block.timestamp <= timeout_1);
+		// confirm that provided secret is pre-image of `hashRefund`
+		bytes32 h = keccak256(abi.encode(_s));
+		require(h == hashRefund);
 
-      (uint px, uint py) = ed25519.scalarMultBase(_s);
-      bytes32 ph = keccak256(abi.encode(px, py));
-      require(ph == pubKeyRefund, "provided secret does not match the expected pubKey");
-      emit DerivedPubKeyRefund(_s);
-
-      // send eth back to owner
-      owner.transfer(address(this).balance);
+		// send eth back to owner
+		owner.transfer(address(this).balance);
 	}
 }
