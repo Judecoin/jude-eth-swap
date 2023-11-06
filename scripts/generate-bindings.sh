@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOLC_BIN="~/Downloads/solc-static-linux"
+SOLC_BIN="/home/elizabeth/Downloads/solc-static-linux"
 
 $SOLC_BIN --abi contracts/contracts/Swap.sol -o contracts/abi/ --overwrite
 $SOLC_BIN --bin contracts/contracts/Swap.sol -o contracts/bin/ --overwrite
