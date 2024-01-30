@@ -6,14 +6,37 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ebfe/keccak"
 	ed25519 "filippo.io/edwards25519"
+	"github.com/ebfe/keccak"
 )
 
+func SumSpendAndViewKeys(a, b *PublicKeyPair) *PublicKeyPair {
+	return &PublicKeyPair{
+		sk: SumPublicKeys(a.sk, b.sk),
+		vk: SumPublicKeys(a.vk, b.vk),
+	}
+}
+
 // Sum sums two public keys (points)
-func Sum(a, b *PublicKey) *PublicKey {
-	s := ed25519.NewIdentityPoint().Add(a.key, b.key) 
+func SumPublicKeys(a, b *PublicKey) *PublicKey {
+	s := ed25519.NewIdentityPoint().Add(a.key, b.key)
 	return &PublicKey{
+		key: s,
+	}
+}
+
+// Sum sums two private spend keys (scalars)
+func SumPrivateSpendKeys(a, b *PrivateSpendKey) *PrivateSpendKey {
+	s := ed25519.NewScalar().Add(a.key, b.key)
+	return &PrivateSpendKey{
+		key: s,
+	}
+}
+
+// Sum sums two private view keys (scalars)
+func SumPrivateViewKeys(a, b *PrivateViewKey) *PrivateViewKey {
+	s := ed25519.NewScalar().Add(a.key, b.key)
+	return &PrivateViewKey{
 		key: s,
 	}
 }
@@ -58,7 +81,7 @@ func NewPrivateKeyPair(skBytes, vkBytes []byte) (*PrivateKeyPair, error) {
 	vk, err := ed25519.NewScalar().SetCanonicalBytes(vkBytes)
 	if err != nil {
 		return nil, err
-	}	
+	}
 
 	return &PrivateKeyPair{
 		sk: &PrivateSpendKey{key: sk},
@@ -72,7 +95,7 @@ func (kp *PrivateKeyPair) AddressBytes() []byte {
 	c := append(psk, pvk...)
 
 	// address encoding is:
-	// 0x12+(32-byte public spend key) + (32-byte-byte public view key) 
+	// 0x12+(32-byte public spend key) + (32-byte-byte public view key)
 	// + First_4_Bytes(Hash(0x12+(32-byte public spend key) + (32-byte public view key)))
 	checksum := getChecksum(append([]byte{0x18}, c...))
 	addr := append(append([]byte{0x18}, c...), checksum[:4]...)
@@ -80,7 +103,7 @@ func (kp *PrivateKeyPair) AddressBytes() []byte {
 }
 
 func (kp *PrivateKeyPair) Address() Address {
-	return Address(EncodejudecoinBase58(kp.AddressBytes()))
+	return Address(EncodeJudecoinBase58(kp.AddressBytes()))
 }
 
 func (kp *PrivateKeyPair) PublicKeyPair() *PublicKeyPair {
@@ -175,7 +198,7 @@ func (kp *PublicKeyPair) AddressBytes() []byte {
 	c := append(psk, pvk...)
 
 	// address encoding is:
-	// 0x12+(32-byte public spend key) + (32-byte-byte public view key) 
+	// 0x12+(32-byte public spend key) + (32-byte-byte public view key)
 	// + First_4_Bytes(Hash(0x12+(32-byte public spend key) + (32-byte public view key)))
 	checksum := getChecksum(append([]byte{0x18}, c...))
 	addr := append(append([]byte{0x18}, c...), checksum[:4]...)
@@ -183,7 +206,7 @@ func (kp *PublicKeyPair) AddressBytes() []byte {
 }
 
 func (kp *PublicKeyPair) Address() Address {
-	return Address(EncodejudecoinBase58(kp.AddressBytes()))
+	return Address(EncodeJudecoinBase58(kp.AddressBytes()))
 }
 
 // GenerateKeys returns a private spend key and view key

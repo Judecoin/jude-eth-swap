@@ -42,7 +42,7 @@ type Bob interface {
 type bob struct {
 	privkeys *judecoin.PrivateKeyPair
 	pubkeys  *judecoin.PublicKeyPair
-	client judecoin.Client
+	client 	 judecoin.Client
 	contract *swap.Swap
 }
 
@@ -71,10 +71,9 @@ func (b *bob) WatchForRefund() (<-chan *judecoin.PrivateKeyPair, error) {
 }
 
 func (b *bob) LockFunds(akp *judecoin.PublicKeyPair, amount uint) error {
-	sk := judecoin.Sum(akp.SpendKey(), b.pubkeys.SpendKey())
-	vk := judecoin.Sum(akp.ViewKey(), b.pubkeys.ViewKey())
+	kp := judecoin.SumSpendAndViewKeys(akp, b.pubkeys)
 
-	address := judecoin.NewPublicKeyPair(sk, vk).Address()
+	address := kp.Address()
 	if err := b.client.Transfer(address, amount); err != nil {
 		return err
 	}
