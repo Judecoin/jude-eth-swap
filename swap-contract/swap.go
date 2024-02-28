@@ -31,8 +31,8 @@ var (
 
 // SwapMetaData contains all meta data concerning the Swap contract.
 var SwapMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_pubKeyClaim\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_pubKeyRefund\",\"type\":\"bytes32\"}],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"s\",\"type\":\"uint256\"}],\"name\":\"DerivedPubKeyClaim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"s\",\"type\":\"uint256\"}],\"name\":\"DerivedPubKeyRefund\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_s\",\"type\":\"uint256\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pubKeyClaim\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pubKeyRefund\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_s\",\"type\":\"uint256\"}],\"name\":\"refund\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"set_ready\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
-	Bin: "0x60806040526000600560146101000a81548160ff02191690831515021790555060405162000d0738038062000d0783398181016040528101906200004491906200016b565b33600560006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555081600181905550806002819055506201518042620000a49190620001eb565b600381905550604051620000b8906200011d565b604051809103906000f080158015620000d5573d6000803e3d6000fd5b506000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505062000248565b61014c8062000bbb83390190565b600080fd5b6000819050919050565b620001458162000130565b81146200015157600080fd5b50565b60008151905062000165816200013a565b92915050565b600080604083850312156200018557620001846200012b565b5b6000620001958582860162000154565b9250506020620001a88582860162000154565b9150509250929050565b6000819050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000620001f882620001b2565b91506200020583620001b2565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff038211156200023d576200023c620001bc565b5b828201905092915050565b61096380620002586000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c806303f7e2461461005c578063278ecde11461007a578063379607f514610096578063736290f8146100b257806374d7c138146100d0575b600080fd5b6100646100da565b60405161007191906105dc565b60405180910390f35b610094600480360381019061008f9190610632565b6100e0565b005b6100b060048036038101906100ab9190610632565b6102e1565b005b6100ba610531565b6040516100c791906105dc565b60405180910390f35b6100d8610537565b005b60025481565b6003544211158015610105575060001515600560149054906101000a900460ff161515145b8061011257506004544211155b61011b57600080fd5b60008060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663c4f4912b846040518263ffffffff1660e01b8152600401610177919061066e565b604080518083038186803b15801561018e57600080fd5b505afa1580156101a2573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101c6919061069e565b91509150600082826040516020016101df9291906106de565b604051602081830303815290604052805190602001209050600254811461023b576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016102329061078a565b60405180910390fd5b7f349c9cedc1d596c3b1aa537408b5cd2e966f0ceb5ad4c4a6ff5943e392ddd9df8460405161026a919061066e565b60405180910390a1600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166108fc479081150290604051600060405180830381858888f193505050501580156102da573d6000803e3d6000fd5b5050505050565b60011515600560149054906101000a900460ff161515141561034757600454421115610342576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610339906107f6565b60405180910390fd5b61038d565b60035442101561038c576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161038390610888565b60405180910390fd5b5b60008060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663c4f4912b846040518263ffffffff1660e01b81526004016103e9919061066e565b604080518083038186803b15801561040057600080fd5b505afa158015610414573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610438919061069e565b91509150600082826040516020016104519291906106de565b60405160208183030381529060405280519060200120905060015481146104ad576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016104a49061078a565b60405180910390fd5b7f05e2253b8f6851b3d1e3e53c602b41bbcdf31b10621d844c02774c107791d653846040516104dc919061066e565b60405180910390a13373ffffffffffffffffffffffffffffffffffffffff166108fc479081150290604051600060405180830381858888f1935050505015801561052a573d6000803e3d6000fd5b5050505050565b60015481565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461059157600080fd5b6001600560146101000a81548160ff02191690831515021790555062015180426105bb91906108d7565b600481905550565b6000819050919050565b6105d6816105c3565b82525050565b60006020820190506105f160008301846105cd565b92915050565b600080fd5b6000819050919050565b61060f816105fc565b811461061a57600080fd5b50565b60008135905061062c81610606565b92915050565b600060208284031215610648576106476105f7565b5b60006106568482850161061d565b91505092915050565b610668816105fc565b82525050565b6000602082019050610683600083018461065f565b92915050565b60008151905061069881610606565b92915050565b600080604083850312156106b5576106b46105f7565b5b60006106c385828601610689565b92505060206106d485828601610689565b9150509250929050565b60006040820190506106f3600083018561065f565b610700602083018461065f565b9392505050565b600082825260208201905092915050565b7f70726f76696465642073656372657420646f6573206e6f74206d61746368207460008201527f6865206578706563746564207075624b65790000000000000000000000000000602082015250565b6000610774603283610707565b915061077f82610718565b604082019050919050565b600060208201905081810360008301526107a381610767565b9050919050565b7f546f6f206c61746520746f20636c61696d210000000000000000000000000000600082015250565b60006107e0601283610707565b91506107eb826107aa565b602082019050919050565b6000602082019050818103600083015261080f816107d3565b9050919050565b7f2769735265616479203d3d2066616c7365272063616e6e6f7420636c61696d2060008201527f7965742100000000000000000000000000000000000000000000000000000000602082015250565b6000610872602483610707565b915061087d82610816565b604082019050919050565b600060208201905081810360008301526108a181610865565b9050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b60006108e2826105fc565b91506108ed836105fc565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115610922576109216108a8565b5b82820190509291505056fea264697066735822122059759a8eea1b8415b01306afc5ca414b57639423c89263ef84d08a8f75ca1a1b64736f6c63430008090033608060405234801561001057600080fd5b5061012c806100206000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063c4f4912b14602d575b600080fd5b60436004803603810190603f9190609c565b6058565b604051604f92919060d1565b60405180910390f35b600080828391509150915091565b600080fd5b6000819050919050565b607c81606b565b8114608657600080fd5b50565b6000813590506096816075565b92915050565b60006020828403121560af5760ae6066565b5b600060bb848285016089565b91505092915050565b60cb81606b565b82525050565b600060408201905060e4600083018560c4565b60ef602083018460c4565b939250505056fea26469706673582212209e2cf0e27b43a2066f03cfa05815b75f958766318a08531a3c67622f0b24c38164736f6c63430008090033",
+	ABI: "[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_pubKeyClaim\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_pubKeyRefund\",\"type\":\"bytes32\"},{\"internalType\":\"contractEd25519\",\"name\":\"_ed25519\",\"type\":\"address\"}],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"s\",\"type\":\"uint256\"}],\"name\":\"Claimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"p\",\"type\":\"bytes32\"}],\"name\":\"Constructed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"b\",\"type\":\"bool\"}],\"name\":\"IsReady\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"s\",\"type\":\"uint256\"}],\"name\":\"Refunded\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_s\",\"type\":\"uint256\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pubKeyClaim\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pubKeyRefund\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_s\",\"type\":\"uint256\"}],\"name\":\"refund\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"set_ready\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"timeout_0\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"timeout_1\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	Bin: "0x60806040526000600660006101000a81548160ff02191690831515021790555060405162000c0838038062000c088339818101604052810190620000449190620001e7565b33600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555082600281905550816003819055506201518042620000a491906200027c565b600481905550806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507f1ba2159dcdf5aa313440d6540b9acb108e5f7907737e884db04579a584275fbb6003546040516200011d9190620002ea565b60405180910390a150505062000307565b600080fd5b6000819050919050565b620001488162000133565b81146200015457600080fd5b50565b60008151905062000168816200013d565b92915050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b60006200019b826200016e565b9050919050565b6000620001af826200018e565b9050919050565b620001c181620001a2565b8114620001cd57600080fd5b50565b600081519050620001e181620001b6565b92915050565b6000806000606084860312156200020357620002026200012e565b5b6000620002138682870162000157565b9350506020620002268682870162000157565b92505060406200023986828701620001d0565b9150509250925092565b6000819050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000620002898262000243565b9150620002968362000243565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115620002ce57620002cd6200024d565b5b828201905092915050565b620002e48162000133565b82525050565b6000602082019050620003016000830184620002d9565b92915050565b6108f180620003176000396000f3fe608060405234801561001057600080fd5b506004361061007d5760003560e01c806345bb8e091161005b57806345bb8e09146100d85780634ded8d52146100f6578063736290f81461011457806374d7c138146101325761007d565b806303f7e24614610082578063278ecde1146100a0578063379607f5146100bc575b600080fd5b61008a61013c565b6040516100979190610534565b60405180910390f35b6100ba60048036038101906100b5919061058a565b610142565b005b6100d660048036038101906100d1919061058a565b61020c565b005b6100e0610313565b6040516100ed91906105c6565b60405180910390f35b6100fe610319565b60405161010b91906105c6565b60405180910390f35b61011c61031f565b6040516101299190610534565b60405180910390f35b61013a610325565b005b60035481565b600660009054906101000a900460ff16158015610160575060045442105b806101855750600660009054906101000a900460ff16801561018457506005544210155b5b61018e57600080fd5b61019a816003546103f6565b7f3d2a04f53164bedf9a8a46353305d6b2d2261410406df3b41f99ce6489dc003c816040516101c991906105c6565b60405180910390a1600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b60011515600660009054906101000a900460ff161515141561027157600554421061026c576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016102639061063e565b60405180910390fd5b6102b7565b6004544210156102b6576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016102ad906106d0565b60405180910390fd5b5b6102c3816002546103f6565b7f7a355715549cfe7c1cba26304350343fbddc4b4f72d3ce3e7c27117dd20b5cb8816040516102f291906105c6565b60405180910390a13373ffffffffffffffffffffffffffffffffffffffff16ff5b60055481565b60045481565b60025481565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16148015610383575060045442105b61038c57600080fd5b6001600660006101000a81548160ff02191690831515021790555062015180426103b6919061071f565b6005819055507f2724cf6c3ad6a3399ad72482e4013d0171794f3ef4c462b7e24790c658cb3cd460016040516103ec9190610790565b60405180910390a1565b60008060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663bc9e2bcf856040518263ffffffff1660e01b815260040161045291906105c6565b604080518083038186803b15801561046957600080fd5b505afa15801561047d573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104a191906107c0565b91509150600082826040516020016104ba929190610800565b604051602081830303815290604052805190602001209050838114610514576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161050b9061089b565b60405180910390fd5b5050505050565b6000819050919050565b61052e8161051b565b82525050565b60006020820190506105496000830184610525565b92915050565b600080fd5b6000819050919050565b61056781610554565b811461057257600080fd5b50565b6000813590506105848161055e565b92915050565b6000602082840312156105a05761059f61054f565b5b60006105ae84828501610575565b91505092915050565b6105c081610554565b82525050565b60006020820190506105db60008301846105b7565b92915050565b600082825260208201905092915050565b7f546f6f206c61746520746f20636c61696d210000000000000000000000000000600082015250565b60006106286012836105e1565b9150610633826105f2565b602082019050919050565b600060208201905081810360008301526106578161061b565b9050919050565b7f2769735265616479203d3d2066616c7365272063616e6e6f7420636c61696d2060008201527f7965742100000000000000000000000000000000000000000000000000000000602082015250565b60006106ba6024836105e1565b91506106c58261065e565b604082019050919050565b600060208201905081810360008301526106e9816106ad565b9050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b600061072a82610554565b915061073583610554565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0382111561076a576107696106f0565b5b828201905092915050565b60008115159050919050565b61078a81610775565b82525050565b60006020820190506107a56000830184610781565b92915050565b6000815190506107ba8161055e565b92915050565b600080604083850312156107d7576107d661054f565b5b60006107e5858286016107ab565b92505060206107f6858286016107ab565b9150509250929050565b600060408201905061081560008301856105b7565b61082260208301846105b7565b9392505050565b7f70726f76696465642073656372657420646f6573206e6f74206d61746368207460008201527f6865206578706563746564207075624b65790000000000000000000000000000602082015250565b60006108856032836105e1565b915061089082610829565b604082019050919050565b600060208201905081810360008301526108b481610878565b905091905056fea26469706673582212203458aee66a6e663fca09c6f38e888c00c70518d35b721444d29a4130d288331764736f6c63430008090033",
 }
 
 // SwapABI is the input ABI used to generate the binding from.
@@ -44,7 +44,7 @@ var SwapABI = SwapMetaData.ABI
 var SwapBin = SwapMetaData.Bin
 
 // DeploySwap deploys a new Ethereum contract, binding an instance of Swap to it.
-func DeploySwap(auth *bind.TransactOpts, backend bind.ContractBackend, _pubKeyClaim [32]byte, _pubKeyRefund [32]byte) (common.Address, *types.Transaction, *Swap, error) {
+func DeploySwap(auth *bind.TransactOpts, backend bind.ContractBackend, _pubKeyClaim [32]byte, _pubKeyRefund [32]byte, _ed25519 common.Address) (common.Address, *types.Transaction, *Swap, error) {
 	parsed, err := SwapMetaData.GetAbi()
 	if err != nil {
 		return common.Address{}, nil, nil, err
@@ -53,7 +53,7 @@ func DeploySwap(auth *bind.TransactOpts, backend bind.ContractBackend, _pubKeyCl
 		return common.Address{}, nil, nil, errors.New("GetABI returned nil")
 	}
 
-	address, tx, contract, err := bind.DeployContract(auth, *parsed, common.FromHex(SwapBin), backend, _pubKeyClaim, _pubKeyRefund)
+	address, tx, contract, err := bind.DeployContract(auth, *parsed, common.FromHex(SwapBin), backend, _pubKeyClaim, _pubKeyRefund, _ed25519)
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
@@ -264,6 +264,68 @@ func (_Swap *SwapCallerSession) PubKeyRefund() ([32]byte, error) {
 	return _Swap.Contract.PubKeyRefund(&_Swap.CallOpts)
 }
 
+// Timeout0 is a free data retrieval call binding the contract method 0x4ded8d52.
+//
+// Solidity: function timeout_0() view returns(uint256)
+func (_Swap *SwapCaller) Timeout0(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _Swap.contract.Call(opts, &out, "timeout_0")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// Timeout0 is a free data retrieval call binding the contract method 0x4ded8d52.
+//
+// Solidity: function timeout_0() view returns(uint256)
+func (_Swap *SwapSession) Timeout0() (*big.Int, error) {
+	return _Swap.Contract.Timeout0(&_Swap.CallOpts)
+}
+
+// Timeout0 is a free data retrieval call binding the contract method 0x4ded8d52.
+//
+// Solidity: function timeout_0() view returns(uint256)
+func (_Swap *SwapCallerSession) Timeout0() (*big.Int, error) {
+	return _Swap.Contract.Timeout0(&_Swap.CallOpts)
+}
+
+// Timeout1 is a free data retrieval call binding the contract method 0x45bb8e09.
+//
+// Solidity: function timeout_1() view returns(uint256)
+func (_Swap *SwapCaller) Timeout1(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _Swap.contract.Call(opts, &out, "timeout_1")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// Timeout1 is a free data retrieval call binding the contract method 0x45bb8e09.
+//
+// Solidity: function timeout_1() view returns(uint256)
+func (_Swap *SwapSession) Timeout1() (*big.Int, error) {
+	return _Swap.Contract.Timeout1(&_Swap.CallOpts)
+}
+
+// Timeout1 is a free data retrieval call binding the contract method 0x45bb8e09.
+//
+// Solidity: function timeout_1() view returns(uint256)
+func (_Swap *SwapCallerSession) Timeout1() (*big.Int, error) {
+	return _Swap.Contract.Timeout1(&_Swap.CallOpts)
+}
+
 // Claim is a paid mutator transaction binding the contract method 0x379607f5.
 //
 // Solidity: function claim(uint256 _s) returns()
@@ -327,9 +389,9 @@ func (_Swap *SwapTransactorSession) SetReady() (*types.Transaction, error) {
 	return _Swap.Contract.SetReady(&_Swap.TransactOpts)
 }
 
-// SwapDerivedPubKeyClaimIterator is returned from FilterDerivedPubKeyClaim and is used to iterate over the raw logs and unpacked data for DerivedPubKeyClaim events raised by the Swap contract.
-type SwapDerivedPubKeyClaimIterator struct {
-	Event *SwapDerivedPubKeyClaim // Event containing the contract specifics and raw log
+// SwapClaimedIterator is returned from FilterClaimed and is used to iterate over the raw logs and unpacked data for Claimed events raised by the Swap contract.
+type SwapClaimedIterator struct {
+	Event *SwapClaimed // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -343,7 +405,7 @@ type SwapDerivedPubKeyClaimIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *SwapDerivedPubKeyClaimIterator) Next() bool {
+func (it *SwapClaimedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -352,7 +414,7 @@ func (it *SwapDerivedPubKeyClaimIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(SwapDerivedPubKeyClaim)
+			it.Event = new(SwapClaimed)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -367,7 +429,7 @@ func (it *SwapDerivedPubKeyClaimIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(SwapDerivedPubKeyClaim)
+		it.Event = new(SwapClaimed)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -383,41 +445,41 @@ func (it *SwapDerivedPubKeyClaimIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *SwapDerivedPubKeyClaimIterator) Error() error {
+func (it *SwapClaimedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *SwapDerivedPubKeyClaimIterator) Close() error {
+func (it *SwapClaimedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// SwapDerivedPubKeyClaim represents a DerivedPubKeyClaim event raised by the Swap contract.
-type SwapDerivedPubKeyClaim struct {
+// SwapClaimed represents a Claimed event raised by the Swap contract.
+type SwapClaimed struct {
 	S   *big.Int
 	Raw types.Log // Blockchain specific contextual infos
 }
 
-// FilterDerivedPubKeyClaim is a free log retrieval operation binding the contract event 0x05e2253b8f6851b3d1e3e53c602b41bbcdf31b10621d844c02774c107791d653.
+// FilterClaimed is a free log retrieval operation binding the contract event 0x7a355715549cfe7c1cba26304350343fbddc4b4f72d3ce3e7c27117dd20b5cb8.
 //
-// Solidity: event DerivedPubKeyClaim(uint256 s)
-func (_Swap *SwapFilterer) FilterDerivedPubKeyClaim(opts *bind.FilterOpts) (*SwapDerivedPubKeyClaimIterator, error) {
+// Solidity: event Claimed(uint256 s)
+func (_Swap *SwapFilterer) FilterClaimed(opts *bind.FilterOpts) (*SwapClaimedIterator, error) {
 
-	logs, sub, err := _Swap.contract.FilterLogs(opts, "DerivedPubKeyClaim")
+	logs, sub, err := _Swap.contract.FilterLogs(opts, "Claimed")
 	if err != nil {
 		return nil, err
 	}
-	return &SwapDerivedPubKeyClaimIterator{contract: _Swap.contract, event: "DerivedPubKeyClaim", logs: logs, sub: sub}, nil
+	return &SwapClaimedIterator{contract: _Swap.contract, event: "Claimed", logs: logs, sub: sub}, nil
 }
 
-// WatchDerivedPubKeyClaim is a free log subscription operation binding the contract event 0x05e2253b8f6851b3d1e3e53c602b41bbcdf31b10621d844c02774c107791d653.
+// WatchClaimed is a free log subscription operation binding the contract event 0x7a355715549cfe7c1cba26304350343fbddc4b4f72d3ce3e7c27117dd20b5cb8.
 //
-// Solidity: event DerivedPubKeyClaim(uint256 s)
-func (_Swap *SwapFilterer) WatchDerivedPubKeyClaim(opts *bind.WatchOpts, sink chan<- *SwapDerivedPubKeyClaim) (event.Subscription, error) {
+// Solidity: event Claimed(uint256 s)
+func (_Swap *SwapFilterer) WatchClaimed(opts *bind.WatchOpts, sink chan<- *SwapClaimed) (event.Subscription, error) {
 
-	logs, sub, err := _Swap.contract.WatchLogs(opts, "DerivedPubKeyClaim")
+	logs, sub, err := _Swap.contract.WatchLogs(opts, "Claimed")
 	if err != nil {
 		return nil, err
 	}
@@ -427,8 +489,8 @@ func (_Swap *SwapFilterer) WatchDerivedPubKeyClaim(opts *bind.WatchOpts, sink ch
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(SwapDerivedPubKeyClaim)
-				if err := _Swap.contract.UnpackLog(event, "DerivedPubKeyClaim", log); err != nil {
+				event := new(SwapClaimed)
+				if err := _Swap.contract.UnpackLog(event, "Claimed", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -449,21 +511,21 @@ func (_Swap *SwapFilterer) WatchDerivedPubKeyClaim(opts *bind.WatchOpts, sink ch
 	}), nil
 }
 
-// ParseDerivedPubKeyClaim is a log parse operation binding the contract event 0x05e2253b8f6851b3d1e3e53c602b41bbcdf31b10621d844c02774c107791d653.
+// ParseClaimed is a log parse operation binding the contract event 0x7a355715549cfe7c1cba26304350343fbddc4b4f72d3ce3e7c27117dd20b5cb8.
 //
-// Solidity: event DerivedPubKeyClaim(uint256 s)
-func (_Swap *SwapFilterer) ParseDerivedPubKeyClaim(log types.Log) (*SwapDerivedPubKeyClaim, error) {
-	event := new(SwapDerivedPubKeyClaim)
-	if err := _Swap.contract.UnpackLog(event, "DerivedPubKeyClaim", log); err != nil {
+// Solidity: event Claimed(uint256 s)
+func (_Swap *SwapFilterer) ParseClaimed(log types.Log) (*SwapClaimed, error) {
+	event := new(SwapClaimed)
+	if err := _Swap.contract.UnpackLog(event, "Claimed", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// SwapDerivedPubKeyRefundIterator is returned from FilterDerivedPubKeyRefund and is used to iterate over the raw logs and unpacked data for DerivedPubKeyRefund events raised by the Swap contract.
-type SwapDerivedPubKeyRefundIterator struct {
-	Event *SwapDerivedPubKeyRefund // Event containing the contract specifics and raw log
+// SwapConstructedIterator is returned from FilterConstructed and is used to iterate over the raw logs and unpacked data for Constructed events raised by the Swap contract.
+type SwapConstructedIterator struct {
+	Event *SwapConstructed // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -477,7 +539,7 @@ type SwapDerivedPubKeyRefundIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *SwapDerivedPubKeyRefundIterator) Next() bool {
+func (it *SwapConstructedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -486,7 +548,7 @@ func (it *SwapDerivedPubKeyRefundIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(SwapDerivedPubKeyRefund)
+			it.Event = new(SwapConstructed)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -501,7 +563,7 @@ func (it *SwapDerivedPubKeyRefundIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(SwapDerivedPubKeyRefund)
+		it.Event = new(SwapConstructed)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -517,41 +579,41 @@ func (it *SwapDerivedPubKeyRefundIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *SwapDerivedPubKeyRefundIterator) Error() error {
+func (it *SwapConstructedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *SwapDerivedPubKeyRefundIterator) Close() error {
+func (it *SwapConstructedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// SwapDerivedPubKeyRefund represents a DerivedPubKeyRefund event raised by the Swap contract.
-type SwapDerivedPubKeyRefund struct {
-	S   *big.Int
+// SwapConstructed represents a Constructed event raised by the Swap contract.
+type SwapConstructed struct {
+	P   [32]byte
 	Raw types.Log // Blockchain specific contextual infos
 }
 
-// FilterDerivedPubKeyRefund is a free log retrieval operation binding the contract event 0x349c9cedc1d596c3b1aa537408b5cd2e966f0ceb5ad4c4a6ff5943e392ddd9df.
+// FilterConstructed is a free log retrieval operation binding the contract event 0x1ba2159dcdf5aa313440d6540b9acb108e5f7907737e884db04579a584275fbb.
 //
-// Solidity: event DerivedPubKeyRefund(uint256 s)
-func (_Swap *SwapFilterer) FilterDerivedPubKeyRefund(opts *bind.FilterOpts) (*SwapDerivedPubKeyRefundIterator, error) {
+// Solidity: event Constructed(bytes32 p)
+func (_Swap *SwapFilterer) FilterConstructed(opts *bind.FilterOpts) (*SwapConstructedIterator, error) {
 
-	logs, sub, err := _Swap.contract.FilterLogs(opts, "DerivedPubKeyRefund")
+	logs, sub, err := _Swap.contract.FilterLogs(opts, "Constructed")
 	if err != nil {
 		return nil, err
 	}
-	return &SwapDerivedPubKeyRefundIterator{contract: _Swap.contract, event: "DerivedPubKeyRefund", logs: logs, sub: sub}, nil
+	return &SwapConstructedIterator{contract: _Swap.contract, event: "Constructed", logs: logs, sub: sub}, nil
 }
 
-// WatchDerivedPubKeyRefund is a free log subscription operation binding the contract event 0x349c9cedc1d596c3b1aa537408b5cd2e966f0ceb5ad4c4a6ff5943e392ddd9df.
+// WatchConstructed is a free log subscription operation binding the contract event 0x1ba2159dcdf5aa313440d6540b9acb108e5f7907737e884db04579a584275fbb.
 //
-// Solidity: event DerivedPubKeyRefund(uint256 s)
-func (_Swap *SwapFilterer) WatchDerivedPubKeyRefund(opts *bind.WatchOpts, sink chan<- *SwapDerivedPubKeyRefund) (event.Subscription, error) {
+// Solidity: event Constructed(bytes32 p)
+func (_Swap *SwapFilterer) WatchConstructed(opts *bind.WatchOpts, sink chan<- *SwapConstructed) (event.Subscription, error) {
 
-	logs, sub, err := _Swap.contract.WatchLogs(opts, "DerivedPubKeyRefund")
+	logs, sub, err := _Swap.contract.WatchLogs(opts, "Constructed")
 	if err != nil {
 		return nil, err
 	}
@@ -561,8 +623,8 @@ func (_Swap *SwapFilterer) WatchDerivedPubKeyRefund(opts *bind.WatchOpts, sink c
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(SwapDerivedPubKeyRefund)
-				if err := _Swap.contract.UnpackLog(event, "DerivedPubKeyRefund", log); err != nil {
+				event := new(SwapConstructed)
+				if err := _Swap.contract.UnpackLog(event, "Constructed", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -583,12 +645,280 @@ func (_Swap *SwapFilterer) WatchDerivedPubKeyRefund(opts *bind.WatchOpts, sink c
 	}), nil
 }
 
-// ParseDerivedPubKeyRefund is a log parse operation binding the contract event 0x349c9cedc1d596c3b1aa537408b5cd2e966f0ceb5ad4c4a6ff5943e392ddd9df.
+// ParseConstructed is a log parse operation binding the contract event 0x1ba2159dcdf5aa313440d6540b9acb108e5f7907737e884db04579a584275fbb.
 //
-// Solidity: event DerivedPubKeyRefund(uint256 s)
-func (_Swap *SwapFilterer) ParseDerivedPubKeyRefund(log types.Log) (*SwapDerivedPubKeyRefund, error) {
-	event := new(SwapDerivedPubKeyRefund)
-	if err := _Swap.contract.UnpackLog(event, "DerivedPubKeyRefund", log); err != nil {
+// Solidity: event Constructed(bytes32 p)
+func (_Swap *SwapFilterer) ParseConstructed(log types.Log) (*SwapConstructed, error) {
+	event := new(SwapConstructed)
+	if err := _Swap.contract.UnpackLog(event, "Constructed", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// SwapIsReadyIterator is returned from FilterIsReady and is used to iterate over the raw logs and unpacked data for IsReady events raised by the Swap contract.
+type SwapIsReadyIterator struct {
+	Event *SwapIsReady // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *SwapIsReadyIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(SwapIsReady)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(SwapIsReady)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *SwapIsReadyIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *SwapIsReadyIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// SwapIsReady represents a IsReady event raised by the Swap contract.
+type SwapIsReady struct {
+	B   bool
+	Raw types.Log // Blockchain specific contextual infos
+}
+
+// FilterIsReady is a free log retrieval operation binding the contract event 0x2724cf6c3ad6a3399ad72482e4013d0171794f3ef4c462b7e24790c658cb3cd4.
+//
+// Solidity: event IsReady(bool b)
+func (_Swap *SwapFilterer) FilterIsReady(opts *bind.FilterOpts) (*SwapIsReadyIterator, error) {
+
+	logs, sub, err := _Swap.contract.FilterLogs(opts, "IsReady")
+	if err != nil {
+		return nil, err
+	}
+	return &SwapIsReadyIterator{contract: _Swap.contract, event: "IsReady", logs: logs, sub: sub}, nil
+}
+
+// WatchIsReady is a free log subscription operation binding the contract event 0x2724cf6c3ad6a3399ad72482e4013d0171794f3ef4c462b7e24790c658cb3cd4.
+//
+// Solidity: event IsReady(bool b)
+func (_Swap *SwapFilterer) WatchIsReady(opts *bind.WatchOpts, sink chan<- *SwapIsReady) (event.Subscription, error) {
+
+	logs, sub, err := _Swap.contract.WatchLogs(opts, "IsReady")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(SwapIsReady)
+				if err := _Swap.contract.UnpackLog(event, "IsReady", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseIsReady is a log parse operation binding the contract event 0x2724cf6c3ad6a3399ad72482e4013d0171794f3ef4c462b7e24790c658cb3cd4.
+//
+// Solidity: event IsReady(bool b)
+func (_Swap *SwapFilterer) ParseIsReady(log types.Log) (*SwapIsReady, error) {
+	event := new(SwapIsReady)
+	if err := _Swap.contract.UnpackLog(event, "IsReady", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// SwapRefundedIterator is returned from FilterRefunded and is used to iterate over the raw logs and unpacked data for Refunded events raised by the Swap contract.
+type SwapRefundedIterator struct {
+	Event *SwapRefunded // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *SwapRefundedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(SwapRefunded)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(SwapRefunded)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *SwapRefundedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *SwapRefundedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// SwapRefunded represents a Refunded event raised by the Swap contract.
+type SwapRefunded struct {
+	S   *big.Int
+	Raw types.Log // Blockchain specific contextual infos
+}
+
+// FilterRefunded is a free log retrieval operation binding the contract event 0x3d2a04f53164bedf9a8a46353305d6b2d2261410406df3b41f99ce6489dc003c.
+//
+// Solidity: event Refunded(uint256 s)
+func (_Swap *SwapFilterer) FilterRefunded(opts *bind.FilterOpts) (*SwapRefundedIterator, error) {
+
+	logs, sub, err := _Swap.contract.FilterLogs(opts, "Refunded")
+	if err != nil {
+		return nil, err
+	}
+	return &SwapRefundedIterator{contract: _Swap.contract, event: "Refunded", logs: logs, sub: sub}, nil
+}
+
+// WatchRefunded is a free log subscription operation binding the contract event 0x3d2a04f53164bedf9a8a46353305d6b2d2261410406df3b41f99ce6489dc003c.
+//
+// Solidity: event Refunded(uint256 s)
+func (_Swap *SwapFilterer) WatchRefunded(opts *bind.WatchOpts, sink chan<- *SwapRefunded) (event.Subscription, error) {
+
+	logs, sub, err := _Swap.contract.WatchLogs(opts, "Refunded")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(SwapRefunded)
+				if err := _Swap.contract.UnpackLog(event, "Refunded", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseRefunded is a log parse operation binding the contract event 0x3d2a04f53164bedf9a8a46353305d6b2d2261410406df3b41f99ce6489dc003c.
+//
+// Solidity: event Refunded(uint256 s)
+func (_Swap *SwapFilterer) ParseRefunded(log types.Log) (*SwapRefunded, error) {
+	event := new(SwapRefunded)
+	if err := _Swap.contract.UnpackLog(event, "Refunded", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
