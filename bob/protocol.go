@@ -48,15 +48,15 @@ type Bob interface {
 type bob struct {
 	t0, t1 time.Time
 
-	privkeys *judecoin.PrivateKeyPair
-	pubkeys  *judecoin.PublicKeyPair
-	client 	 judecoin.Client
+	privkeys   *judecoin.PrivateKeyPair
+	pubkeys    *judecoin.PublicKeyPair
+	client     judecoin.Client
 	contract   *swap.Swap
 	ethPrivKey *ecdsa.PrivateKey
 }
 
 // NewBob returns a new instance of Bob.
-// It accepts an endpoint to a judecoin-wallet-rpc instance where account 0 contains Bob's XMR.
+// It accepts an endpoint to a judecoin-wallet-rpc instance where account 0 contains Bob's JUDE.
 func NewBob(endpoint string, ethPrivKey string, t0, t1 time.Time) (*bob, error) {
 	pk, err := crypto.HexToECDSA(ethPrivKey)
 	if err != nil {
