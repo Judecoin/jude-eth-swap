@@ -15,8 +15,10 @@ var _ Bob = &bob{}
 // Bob contains the functions that will be called by a user who owns JUDE
 // and wishes to swap for ETH.
 type Bob interface {
-	// GenerateKeys generates Bob's public spend and view keys (S_b, V_b)
-	GenerateKeys() error
+	// GenerateKeys generates Bob's spend and view keys (S_b, V_b)
+	// It returns Bob's public spend key and his private view key, so that Alice can see
+	// if the funds are locked.
+	GenerateKeys() (*judecoin.PublicKey, *judecoin.PrivateViewKey, error)
 
 	// SetContract sets the contract in which Alice has locked her ETH.
 	SetContract(*swap.Swap)
@@ -57,30 +59,28 @@ type bob struct {
 
 // NewBob returns a new instance of Bob.
 // It accepts an endpoint to a judecoin-wallet-rpc instance where account 0 contains Bob's JUDE.
-func NewBob(endpoint string, ethPrivKey string, t0, t1 time.Time) (*bob, error) {
+func NewBob(endpoint string, ethPrivKey string) (*bob, error) {
 	pk, err := crypto.HexToECDSA(ethPrivKey)
 	if err != nil {
 		return nil, err
 	}
 
 	return &bob{
-		t0:         t0,
-		t1:         t1,
 		client:     judecoin.NewClient(endpoint),
 		ethPrivKey: pk,
 	}, nil
 }
 
-// GenerateKeys generates Bob's public spend and view keys (S_b, V_b)
-func (b *bob) GenerateKeys() error {
+// GenerateKeys generates Bob's spend and view keys (S_b, V_b)
+func (b *bob) GenerateKeys() (*judecoin.PublicKey, *judecoin.PrivateViewKey, error) {
 	var err error
 	b.privkeys, err = judecoin.GenerateKeys()
 	if err != nil {
-		return err
+		return nil, nil, err
 	}
 
 	b.pubkeys = b.privkeys.PublicKeyPair()
-	return nil
+	return b.pubkeys.SpendKey(), b.privkeys.ViewKey(), nil
 }
 
 func (b *bob) SetContract(contract *swap.Swap) {

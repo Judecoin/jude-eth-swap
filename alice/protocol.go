@@ -15,8 +15,9 @@ var _ Alice = &alice{}
 // Alice contains the functions that will be called by a user who owns ETH
 // and wishes to swap for JUDE.
 type Alice interface {
-	// GenerateKeys generates Alice's judecoin public spend and view keys (S_b, V_b)
-	GenerateKeys() error
+	// GenerateKeys generates Alice's judecoin spend and view keys (S_b, V_b)
+	// It returns Alice's public spend key
+	GenerateKeys() (*judecoin.PublicKey, error)
 
 	// DeployAndLockETH deploys an instance of the Swap contract and locks `amount` ether in it.
 	DeployAndLockETH(amount uint) (*swap.Swap, error)
@@ -52,30 +53,28 @@ type alice struct {
 // NewAlice returns a new instance of Alice.
 // It accepts an endpoint to a judecoin-wallet-rpc instance where Alice will generate
 // the account in which the JUDE will be deposited.
-func NewAlice(judecoinEndpoint, ethEndpoint, ethPrivKey string, t0, t1 time.Time) (*alice, error) {
+func NewAlice(judecoinEndpoint, ethEndpoint, ethPrivKey string) (*alice, error) {
 	pk, err := crypto.HexToECDSA(ethPrivKey)
 	if err != nil {
 		return nil, err
 	}
 
 	return &alice{
-		t0:          t0,
-		t1:          t1,
 		ethPrivKey:  pk,
 		ethEndpoint: ethEndpoint,
 		client:      judecoin.NewClient(judecoinEndpoint),
 	}, nil
 }
 
-func (a *alice) GenerateKeys() error {
+func (a *alice) GenerateKeys() (*judecoin.PublicKey, error) {
 	var err error
 	a.privkeys, err = judecoin.GenerateKeys()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	a.pubkeys = a.privkeys.PublicKeyPair()
-	return nil
+	return a.pubkeys.SpendKey(), nil
 }
 
 func (a *alice) DeployAndLockETH(amount uint) (*swap.Swap, error) {
