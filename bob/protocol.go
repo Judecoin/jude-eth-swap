@@ -20,6 +20,9 @@ type Bob interface {
 	// if the funds are locked.
 	GenerateKeys() (*judecoin.PublicKey, *judecoin.PrivateViewKey, error)
 
+	// SetAlicePublicKeys sets Alice's public spend and view keys
+	SetAlicePublicKeys(*judecoin.PublicKeyPair)
+
 	// SetContract sets the contract in which Alice has locked her ETH.
 	SetContract(*swap.Swap)
 
@@ -39,9 +42,9 @@ type Bob interface {
 
 	// LockFunds locks Bob's funds in the judecoin account specified by public key
 	// (S_a + S_b), viewable with (V_a + V_b)
-	// It accepts Alice's public keys (S_a, V_a) as input, as well as the amount to lock
+	// It accepts the amount to lock as the input
 	// TODO: units
-	LockFunds(aliceKeys *judecoin.PublicKeyPair, amount uint) error
+	LockFunds(amount uint) error
 
 	// RedeemFunds redeem's Bob's funds on ethereum
 	RedeemFunds() error
@@ -50,11 +53,12 @@ type Bob interface {
 type bob struct {
 	t0, t1 time.Time
 
-	privkeys   *judecoin.PrivateKeyPair
-	pubkeys    *judecoin.PublicKeyPair
-	client     judecoin.Client
-	contract   *swap.Swap
-	ethPrivKey *ecdsa.PrivateKey
+	privkeys        *judecoin.PrivateKeyPair
+	pubkeys         *judecoin.PublicKeyPair
+	client          judecoin.Client
+	contract        *swap.Swap
+	ethPrivKey      *ecdsa.PrivateKey
+	alicePublicKeys *judecoin.PublicKeyPair
 }
 
 // NewBob returns a new instance of Bob.
@@ -83,6 +87,10 @@ func (b *bob) GenerateKeys() (*judecoin.PublicKey, *judecoin.PrivateViewKey, err
 	return b.pubkeys.SpendKey(), b.privkeys.ViewKey(), nil
 }
 
+func (b *bob) SetAlicePublicKeys(sk *judecoin.PublicKeyPair) {
+	b.alicePublicKeys = sk
+}
+
 func (b *bob) SetContract(contract *swap.Swap) {
 	b.contract = contract
 }
@@ -96,8 +104,8 @@ func (b *bob) WatchForRefund() (<-chan *judecoin.PrivateKeyPair, error) {
 	return nil, nil
 }
 
-func (b *bob) LockFunds(akp *judecoin.PublicKeyPair, amount uint) error {
-	kp := judecoin.SumSpendAndViewKeys(akp, b.pubkeys)
+func (b *bob) LockFunds(amount uint) error {
+	kp := judecoin.SumSpendAndViewKeys(b.alicePublicKeys, b.pubkeys)
 
 	address := kp.Address()
 	if err := b.client.Transfer(address, 0, amount); err != nil {
