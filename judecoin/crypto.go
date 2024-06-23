@@ -175,6 +175,10 @@ func (k *PrivateViewKey) Hex() string {
 	return hex.EncodeToString(k.key.Bytes())
 }
 
+func NewPrivateViewKeyFromHex() *PrivateViewKey {
+	return nil // TODO
+}
+
 type PublicKey struct {
 	key *ed25519.Point
 }
@@ -237,8 +241,8 @@ func (kp *PublicKeyPair) AddressBytes() []byte {
 	c := append(psk, pvk...)
 
 	// address encoding is:
-	// 0x12+(32-byte public spend key) + (32-byte-byte public view key)
-	// + First_4_Bytes(Hash(0x12+(32-byte public spend key) + (32-byte public view key)))
+	// 0x66+(32-byte public spend key) + (32-byte-byte public view key)
+	// + First_4_Bytes(Hash(0x66+(32-byte public spend key) + (32-byte public view key)))
 	checksum := getChecksum(append([]byte{addressPrefixMainnet}, c...))
 	addr := append(append([]byte{addressPrefixMainnet}, c...), checksum[:4]...)
 	return addr

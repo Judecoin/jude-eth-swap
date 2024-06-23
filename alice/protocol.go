@@ -2,10 +2,12 @@ package alice
 
 import (
 	"crypto/ecdsa"
-	"math/big"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	//"math/big"
+
+	//"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
@@ -26,8 +28,12 @@ type Alice interface {
 	// It returns Alice's public spend key
 	GenerateKeys() (*judecoin.PublicKeyPair, error)
 
+	// SetBobKeys sets Bob's public spend key (to be stored in the contract) and Bob's
+	// private view key (used to check JUDE balance before calling Ready())
+	SetBobKeys(*judecoin.PublicKey, *judecoin.PrivateViewKey)
+
 	// DeployAndLockETH deploys an instance of the Swap contract and locks `amount` ether in it.
-	DeployAndLockETH(amount uint) (*swap.Swap, error)
+	DeployAndLockETH(amount uint) (ethcommon.Address, error)
 
 	// Ready calls the Ready() method on the Swap contract, indicating to Bob he has until time t_1 to
 	// call Claim(). Ready() should only be called once Alice sees Bob lock his JUDE.
@@ -53,9 +59,9 @@ type alice struct {
 	bobspubkeys *judecoin.PublicKey
 	client      judecoin.Client
 
-	contract    *swap.Swap
-	ethPrivKey  *ecdsa.PrivateKey
-	ethEndpoint string
+	contract   *swap.Swap
+	ethPrivKey *ecdsa.PrivateKey
+	ethClient  *ethclient.Client
 }
 
 // NewAlice returns a new instance of Alice.
@@ -67,10 +73,15 @@ func NewAlice(judecoinEndpoint, ethEndpoint, ethPrivKey string) (*alice, error) 
 		return nil, err
 	}
 
+	ec, err := ethclient.Dial(ethEndpoint)
+	if err != nil {
+		return nil, err
+	}
+
 	return &alice{
-		ethPrivKey:  pk,
-		ethEndpoint: ethEndpoint,
-		client:      judecoin.NewClient(judecoinEndpoint),
+		ethPrivKey: pk,
+		ethClient:  ec,
+		client:     judecoin.NewClient(judecoinEndpoint),
 	}, nil
 }
 
@@ -85,23 +96,22 @@ func (a *alice) GenerateKeys() (*judecoin.PublicKeyPair, error) {
 	return a.pubkeys, nil
 }
 
-func (a *alice) DeployAndLockETH(amount uint) (*swap.Swap, error) {
-	conn, err := ethclient.Dial("http://127.0.0.1:8545")
-	if err != nil {
-		return nil, err
-	}
+func (a *alice) SetBobKeys(*judecoin.PublicKey, *judecoin.PrivateViewKey) {
 
-	pk_a, err := crypto.HexToECDSA(keyAlice)
-	authAlice, err := bind.NewKeyedTransactorWithChainID(pk_a, big.NewInt(1337)) // ganache chainID
+}
 
-	pxAlice := a.pubkeys.SpendKey().X.Bytes()
-	pyAlice := a.pubkeys.SpendKey.Y.Bytes()
-	_, _, swap, err := DeploySwap(authAlice, conn, pxAlice, pyAlice, pxBob, pyBob)
-	if err != nil {
-		return nil, err
-	}
+func (a *alice) DeployAndLockETH(amount uint) (ethcommon.Address, error) {
+	// pk_a, err := crypto.HexToECDSA(keyAlice)
+	// authAlice, err := bind.NewKeyedTransactorWithChainID(pk_a, big.NewInt(1337)) // ganache chainID
 
-	return nil, nil
+	// pxAlice := a.pubkeys.SpendKey().X.Bytes()
+	// pyAlice := a.pubkeys.SpendKey().Y.Bytes()
+	// _, _, swap, err := swap.DeploySwap(authAlice, a.ethClient, pxAlice, pyAlice, pxBob, pyBob)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	return ethcommon.Address{}, nil
 }
 
 func (a *alice) Ready() error {

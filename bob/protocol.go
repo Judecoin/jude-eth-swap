@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"time"
 
+	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/judecoin/jude-eth-swap/judecoin"
-	"github.com/judecoin/jude-eth-swap/swap-contract"
+	"github.com/ethereum/go-ethereum/ethclient"
+
+	"github.com/noot/atomic-swap/judecoin"
+	"github.com/noot/atomic-swap/swap-contract"
 )
 
 var _ Bob = &bob{}
@@ -24,7 +27,7 @@ type Bob interface {
 	SetAlicePublicKeys(*judecoin.PublicKeyPair)
 
 	// SetContract sets the contract in which Alice has locked her ETH.
-	SetContract(*swap.Swap)
+	SetContract(address ethcommon.Address) error
 
 	// WatchForReady watches for Alice to call Ready() on the swap contract, allowing
 	// Bob to call Claim().
@@ -59,18 +62,25 @@ type bob struct {
 	contract        *swap.Swap
 	ethPrivKey      *ecdsa.PrivateKey
 	alicePublicKeys *judecoin.PublicKeyPair
+	ethClient       *ethclient.Client
 }
 
 // NewBob returns a new instance of Bob.
 // It accepts an endpoint to a judecoin-wallet-rpc instance where account 0 contains Bob's JUDE.
-func NewBob(endpoint string, ethPrivKey string) (*bob, error) {
+func NewBob(judecoinEndpoint, ethEndpoint, ethPrivKey string) (*bob, error) {
 	pk, err := crypto.HexToECDSA(ethPrivKey)
 	if err != nil {
 		return nil, err
 	}
 
+	ec, err := ethclient.Dial(ethEndpoint)
+	if err != nil {
+		return nil, err
+	}
+
 	return &bob{
-		client:     judecoin.NewClient(endpoint),
+		client:     judecoin.NewClient(judecoinEndpoint),
+		ethClient:  ec,
 		ethPrivKey: pk,
 	}, nil
 }
@@ -91,8 +101,10 @@ func (b *bob) SetAlicePublicKeys(sk *judecoin.PublicKeyPair) {
 	b.alicePublicKeys = sk
 }
 
-func (b *bob) SetContract(contract *swap.Swap) {
-	b.contract = contract
+func (b *bob) SetContract(address ethcommon.Address) error {
+	var err error
+	b.contract, err = swap.NewSwap(address, b.ethClient)
+	return err
 }
 
 func (b *bob) WatchForReady() (<-chan struct{}, error) {

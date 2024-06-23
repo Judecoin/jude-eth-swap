@@ -4,7 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/judecoin/jude-eth-swap/net"
+	"github.com/noot/atomic-swap/judecoin"
+	"github.com/noot/atomic-swap/net"
 
 	"github.com/libp2p/go-libp2p-core/peer"
 )
@@ -57,6 +58,34 @@ func (n *node) handleMessageAlice(who peer.ID, msg net.Message) error {
 		n.outCh <- &net.MessageInfo{
 			Message: out,
 			Who:     who,
+		}
+	case *net.SendKeysMessage:
+		if msg.PublicSpendKey == "" || msg.PrivateViewKey == "" {
+			return errors.New("did not receive Bob's public spend or private view key")
+		}
+
+		fmt.Println("got Bob's keys")
+		n.host.SetNextExpectedMessage(&net.NotifyJUDELock{})
+
+		sk, err := judecoin.NewPublicKeyFromHex(msg.PublicSpendKey)
+		if err != nil {
+			return fmt.Errorf("failed to generate Bob's public spend key: %w", err)
+		}
+
+		vk, err := judecoin.NewPrivateViewKeyFromHex(msg.PrivateViewKey)
+		if err != nil {
+			return fmt.Errorf("failed to generate Bob's private view keys: %w", err)
+		}
+
+		n.alice.SetBobKeys(sk, vk)
+		address, err := n.alice.DeployAndLockETH(n.amount)
+		if err != nil {
+			return fmt.Errorf("failed to deploy contract: %w", err)
+		}
+
+	case *net.NotifyJUDELock:
+		if msg.Address == "" {
+			return errors.New("got empty address for locked JUDE")
 		}
 	default:
 		return errors.New("unexpected message type")
