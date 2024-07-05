@@ -106,10 +106,6 @@ func (kp *PrivateKeyPair) AddressBytes() []byte {
 	return addr
 }
 
-func (kp *PrivateKeyPair) Bytes() []byte {
-	return kp.sk.key.Bytes()
-}
-
 func (kp *PrivateKeyPair) Address() Address {
 	return Address(EncodeJudecoinBase58(kp.AddressBytes()))
 }
@@ -179,20 +175,48 @@ func (k *PrivateViewKey) Hex() string {
 	return hex.EncodeToString(k.key.Bytes())
 }
 
-func NewPrivateViewKeyFromHex() *PrivateViewKey {
-	return nil // TODO
+func NewPrivateViewKeyFromHex(vkHex string) (*PrivateViewKey, error) {
+	vkBytes, err := hex.DecodeString(vkHex)
+	if err != nil {
+		return nil, err
+	}
+
+	vk, err := ed25519.NewScalar().SetCanonicalBytes(vkBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return &PrivateViewKey{
+		key: vk,
+	}, nil
 }
 
 type PublicKey struct {
 	key *ed25519.Point
 }
 
-func (k *PublicKey) Bytes() []byte {
-	return k.key.Bytes()
+func NewPublicKeyFromHex(s string) (*PublicKey, error) {
+	b, err := hex.DecodeString(s)
+	if err != nil {
+		return nil, err
+	}
+
+	k, err := ed25519.NewIdentityPoint().SetBytes(b)
+	if err != nil {
+		return nil, err
+	}
+
+	return &PublicKey{
+		key: k,
+	}, nil
 }
 
 func (k *PublicKey) Hex() string {
 	return hex.EncodeToString(k.key.Bytes())
+}
+
+func (k *PublicKey) Bytes() []byte {
+	return k.key.Bytes()
 }
 
 // PublicKeyPair contains a public SpendKey and ViewKey
