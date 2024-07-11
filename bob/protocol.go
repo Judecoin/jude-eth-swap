@@ -1,10 +1,12 @@
 package bob
 
 import (
+	"context"
 	"crypto/ecdsa"
 	"fmt"
 	"time"
 
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -54,6 +56,7 @@ type Bob interface {
 }
 
 type bob struct {
+	ctx    context.Context
 	t0, t1 time.Time
 
 	privkeys        *judecoin.PrivateKeyPair
@@ -79,6 +82,7 @@ func NewBob(judecoinEndpoint, ethEndpoint, ethPrivKey string) (*bob, error) {
 	}
 
 	return &bob{
+		ctx:        context.Background(), // TODO: add cancel
 		client:     judecoin.NewClient(judecoinEndpoint),
 		ethClient:  ec,
 		ethPrivKey: pk,
@@ -112,8 +116,52 @@ func (b *bob) WatchForReady() (<-chan struct{}, error) {
 }
 
 func (b *bob) WatchForRefund() (<-chan *judecoin.PrivateKeyPair, error) {
+	watchOpts := &bind.WatchOpts{
+		Context: b.ctx,
+	}
+
+	out := make(chan *judecoin.PrivateKeyPair)
+	ch := make(chan *swap.SwapRefunded)
+	defer close(out)
+
 	// watch for Refund() event on chain, calculate unlock key as result
-	return nil, nil
+	sub, err := b.contract.WatchRefunded(watchOpts, ch)
+	if err != nil {
+		return nil, err
+	}
+
+	defer sub.Unsubscribe()
+
+	go func() {
+		select {
+		case refund := <-ch:
+			// got Alice's secret
+			saBytes := refund.S.Bytes()
+			var sa [32]byte
+			copy(sa[:], saBytes)
+
+			skA, err := judecoin.NewPrivateSpendKey(sa[:])
+			if err != nil {
+				fmt.Printf("failed to convert Alice's secret into a key: %w", err)
+				return
+			}
+
+			vkA, err := skA.View()
+			if err != nil {
+				fmt.Printf("failed to get view key from Alice's secret spend key: %w", err)
+				return
+			}
+
+			skAB := judecoin.SumPrivateSpendKeys(skA, b.privkeys.SpendKey())
+			vkAB := judecoin.SumPrivateViewKeys(vkA, b.privkeys.ViewKey())
+			kpAB := judecoin.NewPrivateKeyPair(skAB, vkAB)
+			out <- kpAB
+		case <-b.ctx.Done():
+			return
+		}
+	}()
+
+	return out, nil
 }
 
 func (b *bob) LockFunds(amount uint) error {
