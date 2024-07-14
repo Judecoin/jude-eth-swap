@@ -84,7 +84,7 @@ func (n *node) handleMessageAlice(who peer.ID, msg net.Message) error {
 		}
 
 		fmt.Printf("deployed Swap contract: address=%s\n", address)
-	case *net.NotifyXMRLock:
+	case *net.NotifyJUDELock:
 		if msg.Address == "" {
 			return errors.New("got empty address for locked JUDE")
 		}

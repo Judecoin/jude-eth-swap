@@ -1,9 +1,11 @@
 package alice
 
 import (
+	"context"
 	"crypto/ecdsa"
-	"time"
+	"fmt"
 	"math/big"
+	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
@@ -51,6 +53,7 @@ type Alice interface {
 }
 
 type alice struct {
+	ctx    context.Context
 	t0, t1 time.Time
 
 	privkeys    *judecoin.PrivateKeyPair
@@ -78,6 +81,7 @@ func NewAlice(judecoinEndpoint, ethEndpoint, ethPrivKey string) (*alice, error) 
 	}
 
 	return &alice{
+		ctx:        context.Background(), // TODO: add cancel
 		ethPrivKey: pk,
 		ethClient:  ec,
 		client:     judecoin.NewClient(judecoinEndpoint),
@@ -105,9 +109,9 @@ func (a *alice) DeployAndLockETH(amount uint) (ethcommon.Address, error) {
 	pkAlice := a.pubkeys.SpendKey().Bytes()
 	pkBob := a.bobpubkeys.Bytes()
 	var pkAliceFixed [32]byte
-	copy(pkAliceFixed [:], pkAlice)
+	copy(pkAliceFixed[:], pkAlice)
 	var pkBobFixed [32]byte
-	copy(pkBobFixed [:], pkBob)
+	copy(pkBobFixed[:], pkBob)
 	address, _, _, err := swap.DeploySwap(authAlice, a.ethClient, pkAliceFixed, pkBobFixed)
 	if err != nil {
 		// return nil, err
@@ -121,7 +125,52 @@ func (a *alice) Ready() error {
 }
 
 func (a *alice) WatchForClaim() (<-chan *judecoin.PrivateKeyPair, error) {
-	return nil, nil
+	watchOpts := &bind.WatchOpts{
+		Context: a.ctx,
+	}
+
+	out := make(chan *judecoin.PrivateKeyPair)
+	ch := make(chan *swap.SwapClaimed)
+	defer close(out)
+
+	// watch for Refund() event on chain, calculate unlock key as result
+	sub, err := a.contract.WatchClaimed(watchOpts, ch)
+	if err != nil {
+		return nil, err
+	}
+
+	defer sub.Unsubscribe()
+
+	go func() {
+		select {
+		case claim := <-ch:
+			// got Bob's secret
+			sbBytes := claim.S.Bytes()
+			var sb [32]byte
+			copy(sb[:], sbBytes)
+
+			skB, err := judecoin.NewPrivateSpendKey(sb[:])
+			if err != nil {
+				fmt.Printf("failed to convert Bob's secret into a key: %w", err)
+				return
+			}
+
+			vkA, err := skB.View()
+			if err != nil {
+				fmt.Printf("failed to get view key from Bob's secret spend key: %w", err)
+				return
+			}
+
+			skAB := judecoin.SumPrivateSpendKeys(skB, a.privkeys.SpendKey())
+			vkAB := judecoin.SumPrivateViewKeys(vkA, a.privkeys.ViewKey())
+			kpAB := judecoin.NewPrivateKeyPair(skAB, vkAB)
+			out <- kpAB
+		case <-a.ctx.Done():
+			return
+		}
+	}()
+
+	return out, nil
 }
 
 func (a *alice) Refund() error {
