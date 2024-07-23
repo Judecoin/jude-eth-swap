@@ -50,6 +50,9 @@ type Alice interface {
 	// and returns to her the ether in the contract.
 	// If time t_1 passes and Claim() has not been called, Alice should call Refund().
 	Refund() error
+
+	// CreateJudecoinWallet creates Alice's judecoin wallet after Bob calls Claim().
+	CreateJudecoinWallet(*judecoin.PrivateKeyPair) (judecoin.Address, error)
 }
 
 type alice struct {
@@ -188,4 +191,17 @@ func (a *alice) WatchForClaim() (<-chan *judecoin.PrivateKeyPair, error) {
 
 func (a *alice) Refund() error {
 	return nil
+}
+
+func (a *alice) CreateJudecoinWallet(kpB *judecoin.PrivateKeyPair) (judecoin.Address, error) {
+	// got Bob's secret
+	skAB := judecoin.SumPrivateSpendKeys(kpB.SpendKey(), a.privkeys.SpendKey())
+	vkAB := judecoin.SumPrivateViewKeys(kpB.ViewKey(), a.privkeys.ViewKey())
+	kpAB := judecoin.NewPrivateKeyPair(skAB, vkAB)
+
+	if err := a.client.GenerateFromKeys(kpAB, "alice-swap-wallet", ""); err != nil {
+		return "", err
+	}
+
+	return kpAB.Address(), nil
 }
