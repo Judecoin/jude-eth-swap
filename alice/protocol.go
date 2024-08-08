@@ -158,31 +158,40 @@ func (a *alice) WatchForClaim() (<-chan *judecoin.PrivateKeyPair, error) {
 	defer sub.Unsubscribe()
 
 	go func() {
-		select {
-		case claim := <-ch:
-			// got Bob's secret
-			sbBytes := claim.S.Bytes()
-			var sb [32]byte
-			copy(sb[:], sbBytes)
+		for {
+			select {
+			case claim := <-ch:
+				fmt.Println("got claim", claim)
+				if claim == nil || claim.S == nil {
+					continue
+				}
 
-			skB, err := judecoin.NewPrivateSpendKey(sb[:])
-			if err != nil {
-				fmt.Printf("failed to convert Bob's secret into a key: %w", err)
+				// got Bob's secret
+				sbBytes := claim.S.Bytes()
+				var sb [32]byte
+				copy(sb[:], sbBytes)
+
+				skB, err := judecoin.NewPrivateSpendKey(sb[:])
+				if err != nil {
+					fmt.Printf("failed to convert Bob's secret into a key: %w", err)
+					return
+				}
+
+				vkA, err := skB.View()
+				if err != nil {
+					fmt.Printf("failed to get view key from Bob's secret spend key: %w", err)
+					return
+				}
+
+				skAB := judecoin.SumPrivateSpendKeys(skB, a.privkeys.SpendKey())
+				vkAB := judecoin.SumPrivateViewKeys(vkA, a.privkeys.ViewKey())
+				kpAB := judecoin.NewPrivateKeyPair(skAB, vkAB)
+
+				out <- kpAB
+				return
+			case <-a.ctx.Done():
 				return
 			}
-
-			vkA, err := skB.View()
-			if err != nil {
-				fmt.Printf("failed to get view key from Bob's secret spend key: %w", err)
-				return
-			}
-
-			skAB := judecoin.SumPrivateSpendKeys(skB, a.privkeys.SpendKey())
-			vkAB := judecoin.SumPrivateViewKeys(vkA, a.privkeys.ViewKey())
-			kpAB := judecoin.NewPrivateKeyPair(skAB, vkAB)
-			out <- kpAB
-		case <-a.ctx.Done():
-			return
 		}
 	}()
 

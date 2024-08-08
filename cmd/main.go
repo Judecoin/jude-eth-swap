@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	defaultAliceJudecoinEndpoint = "http://127.0.0.1:16063/json_rpc"
-	defaultBobJudecoinEndpoint   = "http://127.0.0.1:16060/json_rpc"
+	defaultAliceJudecoinEndpoint = "http://127.0.0.1:16064/json_rpc"
+	defaultBobJudecoinEndpoint   = "http://127.0.0.1:16063/json_rpc"
 	defaultEthEndpoint           = "ws://localhost:8545"
 	defaultPrivKeyAlice          = "4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d"
 	defaultPrivKeyBob            = "6cbed15c793ce57650b9877cf6fa156fbef513c4e6134f022a85b1ffdd59b2a1"
