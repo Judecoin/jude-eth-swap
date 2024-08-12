@@ -3,6 +3,7 @@ package alice
 import (
 	"context"
 	"crypto/ecdsa"
+	"errors"
 	"fmt"
 	"math/big"
 	"time"
@@ -53,6 +54,8 @@ type Alice interface {
 
 	// CreateJudecoinWallet creates Alice's judecoin wallet after Bob calls Claim().
 	CreateJudecoinWallet(*judecoin.PrivateKeyPair) (judecoin.Address, error)
+
+	NotifyClaimed(txHash string) (judecoin.Address, error)
 }
 
 type alice struct {
@@ -158,6 +161,7 @@ func (a *alice) WatchForClaim() (<-chan *judecoin.PrivateKeyPair, error) {
 	defer sub.Unsubscribe()
 
 	go func() {
+		fmt.Println("watching for claim...")
 		for {
 			select {
 			case claim := <-ch:
@@ -220,4 +224,29 @@ func (a *alice) CreateJudecoinWallet(kpB *judecoin.PrivateKeyPair) (judecoin.Add
 	}
 
 	return kpAB.Address(), nil
+}
+
+func (a *alice) NotifyClaimed(txHash string) (monero.Address, error) {
+	receipt, err := a.ethClient.TransactionReceipt(a.ctx, ethcommon.HexToHash(txHash))
+	if err != nil {
+		return "", err
+	}
+
+	if len(receipt.Logs) == 0 {
+		return "", errors.New("no logs!!!")
+	}
+
+	abi, err := swap.SwapMetaData.GetAbi()
+	if err != nil {
+		return "", err
+	}
+
+	data := receipt.Logs[0].Data
+	res, err := abi.Unpack("Claimed", data)
+	if err != nil {
+		return "", err
+	}
+
+	fmt.Println("got Bob's secret!", res)
+	return "", nil
 }

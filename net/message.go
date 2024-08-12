@@ -67,3 +67,15 @@ func (m *NotifyJUDELock) String() string {
 func (m *NotifyJUDELock) Encode() ([]byte, error) {
 	return json.Marshal(m)
 }
+
+type NotifyClaimed struct {
+	TxHash string
+}
+
+func (m *NotifyClaimed) String() string {
+	return fmt.Sprintf("NotifyClaimed %s", m.TxHash)
+}
+
+func (m *NotifyClaimed) Encode() ([]byte, error) {
+	return json.Marshal(m)
+}
