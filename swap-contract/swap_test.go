@@ -3,12 +3,12 @@ package swap
 import (
 	"context"
 	"crypto/ecdsa"
-	"fmt"
 	"math/big"
 	"testing"
 	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -73,7 +73,7 @@ func TestSwap_Claim(t *testing.T) {
 	require.NoError(t, err)
 	pubKeyBob := keyPairBob.PublicKeyPair().SpendKey().Bytes()
 
-	secretBob := keyPairBob.Bytes()
+	secretBob := keyPairBob.SpendKeyBytes()
 
 	// setup
 	conn, err := ethclient.Dial("ws://127.0.0.1:8545")
@@ -96,9 +96,9 @@ func TestSwap_Claim(t *testing.T) {
 	require.NoError(t, err)
 
 	var pkAliceFixed [32]byte
-	copy(pkAliceFixed[:], pubKeyAlice)
+	copy(pkAliceFixed[:], reverse(pubKeyAlice))
 	var pkBobFixed [32]byte
-	copy(pkBobFixed[:], pubKeyBob)
+	copy(pkBobFixed[:], reverse(pubKeyBob))
 	_, _, swap, err := DeploySwap(authAlice, conn, pkBobFixed, pkAliceFixed)
 	require.NoError(t, err)
 
@@ -121,8 +121,6 @@ func TestSwap_Claim(t *testing.T) {
 	_, err = swap.SetReady(txOpts)
 	require.NoError(t, err)
 
-	watchForEvent(t, swap)
-
 	_, err = swap.Claim(txOptsBob, s)
 	require.NoError(t, err)
 
@@ -137,29 +135,4 @@ func TestSwap_Claim(t *testing.T) {
 
 func TestSwap_Refund(t *testing.T) {
 
-}
-
-func watchForEvent(t *testing.T, contract *Swap) {
-	watchOpts := &bind.WatchOpts{
-		Context: context.Background(),
-	}
-
-	ch := make(chan *SwapCalculatedPublicKey)
-
-	sub, err := contract.WatchCalculatedPublicKey(watchOpts, ch)
-	require.NoError(t, err)
-
-	defer sub.Unsubscribe()
-
-	go func() {
-		for event := range ch {
-			if event == nil {
-				continue
-			}
-
-			fmt.Println("got event")
-			fmt.Println(event.Px, event.Py)
-			return
-		}
-	}()
 }
