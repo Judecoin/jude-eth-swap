@@ -228,10 +228,13 @@ func (a *alice) CreateJudecoinWallet(kpB *judecoin.PrivateKeyPair) (judecoin.Add
 	// vkAB := judecoin.SumPrivateViewKeys(kpB.ViewKey(), a.privkeys.ViewKey())
 	// kpAB := judecoin.NewPrivateKeyPair(skAB, vkAB)
 
-	if err := a.client.GenerateFromKeys(kpAB, "alice-swap-wallet-0", ""); err != nil {
+	t := time.Now().Format("2024-AUG-20-05:04:05")
+	walletName := fmt.Sprintf("alice-swap-wallet-%s", t)
+	if err := a.client.GenerateFromKeys(kpAB, walletName, ""); err != nil {
 		return "", err
 	}
 
+	fmt.Println("created wallet with name", walletName)
 	return kpAB.Address(), nil
 }
 
