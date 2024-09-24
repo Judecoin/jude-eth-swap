@@ -278,5 +278,5 @@ func (a *alice) NotifyClaimed(txHash string) (judecoin.Address, error) {
 		return "", err
 	}
 
-	return a.CreateMoneroWallet(kpAB)
+	return a.CreateJudecoinWallet(kpAB)
 }

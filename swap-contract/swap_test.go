@@ -3,10 +3,10 @@ package swap
 import (
 	"context"
 	"crypto/ecdsa"
-	"encoding/hex"
-	"fmt"
 	"math/big"
 	"testing"
+	"fmt"
+	"encoding/hex"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/crypto"

@@ -138,7 +138,7 @@ func (n *node) handleMessageBob(who peer.ID, msg net.Message, setupDone chan str
 						continue
 					}
 
-					fmt.Println("Alice refunded, got monero account key", kp)
+					fmt.Println("Alice refunded, got judecoin account key", kp)
 					return
 					// TODO: generate wallet
 				}
@@ -150,7 +150,7 @@ func (n *node) handleMessageBob(who peer.ID, msg net.Message, setupDone chan str
 			return err
 		}
 
-		out := &net.NotifyXMRLock{
+		out := &net.NotifyJUDELock{
 			Address: string(addrAB),
 		}
 
