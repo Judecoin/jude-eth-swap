@@ -16,9 +16,13 @@ import (
 
 	"github.com/judecoin/jude-eth-swap/judecoin"
 	"github.com/judecoin/jude-eth-swap/swap-contract"
+
+	logging "github.com/ipfs/go-log"
 )
 
 var _ Alice = &alice{}
+
+var log = logging.Logger("alice")
 
 const (
 	keyAlice = "4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d"
@@ -169,11 +173,10 @@ func (a *alice) WatchForClaim() (<-chan *judecoin.PrivateKeyPair, error) {
 	defer sub.Unsubscribe()
 
 	go func() {
-		fmt.Println("watching for claim...")
+		log.Debug("watching for claim...")
 		for {
 			select {
 			case claim := <-ch:
-				fmt.Println("got claim", claim)
 				if claim == nil || claim.S == nil {
 					continue
 				}
@@ -185,13 +188,13 @@ func (a *alice) WatchForClaim() (<-chan *judecoin.PrivateKeyPair, error) {
 
 				skB, err := judecoin.NewPrivateSpendKey(sb[:])
 				if err != nil {
-					fmt.Printf("failed to convert Bob's secret into a key: %w", err)
+					log.Error("failed to convert Bob's secret into a key: ", err)
 					return
 				}
 
 				vkA, err := skB.View()
 				if err != nil {
-					fmt.Printf("failed to get view key from Bob's secret spend key: %w", err)
+					log.Error("failed to get view key from Bob's secret spend key: ", err)
 					return
 				}
 
@@ -222,19 +225,14 @@ func (a *alice) Refund() error {
 	return err
 }
 
-func (a *alice) CreateJudecoinWallet(kpB *judecoin.PrivateKeyPair) (judecoin.Address, error) {
-	// got Bob's secret
-	// skAB := judecoin.SumPrivateSpendKeys(kpB.SpendKey(), a.privkeys.SpendKey())
-	// vkAB := judecoin.SumPrivateViewKeys(kpB.ViewKey(), a.privkeys.ViewKey())
-	// kpAB := judecoin.NewPrivateKeyPair(skAB, vkAB)
-
+func (a *alice) CreateJudecoinWallet(kpAB *judecoin.PrivateKeyPair) (judecoin.Address, error) {
 	t := time.Now().Format("2024-AUG-20-05:04:05")
 	walletName := fmt.Sprintf("alice-swap-wallet-%s", t)
 	if err := a.client.GenerateFromKeys(kpAB, walletName, ""); err != nil {
 		return "", err
 	}
 
-	fmt.Println("created wallet with name", walletName)
+	log.Info("created wallet with name", walletName)
 	return kpAB.Address(), nil
 }
 
@@ -259,7 +257,7 @@ func (a *alice) NotifyClaimed(txHash string) (judecoin.Address, error) {
 		return "", err
 	}
 
-	fmt.Println("got Bob's secret!", hex.EncodeToString(res[0].(*big.Int).Bytes()))
+	log.Debug("got Bob's secret: ", hex.EncodeToString(res[0].(*big.Int).Bytes()))
 
 	// got Bob's secret
 	sbBytes := res[0].(*big.Int).Bytes()
@@ -268,7 +266,7 @@ func (a *alice) NotifyClaimed(txHash string) (judecoin.Address, error) {
 
 	skB, err := judecoin.NewPrivateSpendKey(sb[:])
 	if err != nil {
-		fmt.Printf("failed to convert Bob's secret into a key: %s\n", err)
+		log.Error("failed to convert Bob's secret into a key: %s\n", err)
 		return "", err
 	}
 
