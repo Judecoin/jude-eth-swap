@@ -246,6 +246,23 @@ func (a *alice) CreateJudecoinWallet(kpAB *judecoin.PrivateKeyPair) (judecoin.Ad
 	}
 
 	log.Info("created wallet: ", walletName)
+
+	if err := a.client.Refresh(); err != nil {
+		return "", err
+	}
+
+	balance, err := a.client.GetBalance(0)
+	if err != nil {
+		return "", err
+	}
+
+	accounts, err := a.client.GetAccounts()
+	if err != nil {
+		return "", err
+	}
+
+	log.Debug(accounts)
+	log.Info("wallet balance: ", balance.Balance)
 	return kpAB.Address(), nil
 }
 
@@ -284,10 +301,17 @@ func (a *alice) NotifyClaimed(txHash string) (judecoin.Address, error) {
 	}
 
 	skAB := judecoin.SumPrivateSpendKeys(skB, a.privkeys.SpendKey())
-	kpAB, err := skAB.AsPrivateKeyPair()
-	if err != nil {
-		return "", err
-	}
+	// kpAB, err := skAB.AsPrivateKeyPair()
+	// if err != nil {
+	// 	return "", err
+	// }
+
+	vkAB := judecoin.SumPrivateViewKeys(a.bobViewKey, a.privkeys.ViewKey())
+	//log.Debug("private view key: ", vkAB.Hex())
+	//log.Debug("public view key: ", vkAB.Public().Hex())
+	//log.Debug("private view key from spend key: ", kpAB.ViewKey().Hex())
+
+	kpAB := judecoin.NewPrivateKeyPair(skAB, vkAB)
 
 	pkAB := kpAB.PublicKeyPair()
 	log.Info("public spend keys: ", pkAB.SpendKey().Hex())
