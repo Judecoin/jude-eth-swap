@@ -64,6 +64,15 @@ Start judecoin-wallet-rpc for Bob with some wallet that has regtest judecoin:
 ./judecoin-wallet-rpc  --rpc-bind-port 16063 --password "" --disable-rpc-login --wallet-file test-wallet
 ```
 
+Determine the address of `test-wallet` by running `judecoin-wallet-cli` and `address all`
+
+Then, mine some blocks on the judecoin test chain by running the following RPC command, replacing the address with the one from the previous step:
+```
+curl -X POST http://127.0.0.1:16061/json_rpc -d '{"jsonrpc":"2.0","id":"0","method":"generateblocks","params":{ "wallet_address":"6j3gQmw1qHCCoc3iacrJgh79UiuoQgW4KDe4aLh5Dww2N6B8iWhuzB1StgCEWjpt4YNVzfrQLRB82XfgjcYgcnHWSiKGhny","amount_of_blocks":100}' -H 'Content-Type: application/json'
+```
+
+This will deposit some JUDE in your account.
+
 Start judecoin-wallet-rpc for Alice:
 ```
 ./judecoin-wallet-rpc  --rpc-bind-port 16064 --password "" --disable-rpc-login --wallet-dir .
@@ -109,9 +118,19 @@ Generate the bindings
 ```
 
 ##### Testing
-To run tests on the go bindings, execute
+To run tests on the go bindings, execute:
 ```
 go test ./swap-contract
 ```
+
+```
+
 ./abigen --abi contracts/abi/Swap.abi --pkg swap --type Swap --out swap.go --bin contracts/bin/Swap.bin 
 ```
+
+This will test the main protocol functionality on the ethereum side:
+1. Success case, where both parties obey the protocol
+2. Case where Bob never locks judecoin on his side. Alice can Refund
+3. Case where Bob locks judecoin, but never claims his ether from the contract
+
+Upon Refund/Claim by either side, they reveal the secret to the counterparty, which *always* guarantees that the counteryparty can claim the locked funds on ethereum.
