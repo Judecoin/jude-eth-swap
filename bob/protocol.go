@@ -15,8 +15,8 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	"github.com/noot/atomic-swap/judecoin"
-	"github.com/noot/atomic-swap/swap-contract"
+	"github.com/judecoin/atomic-swap/judecoin"
+	"github.com/judecoin/atomic-swap/swap-contract"
 
 	logging "github.com/ipfs/go-log"
 )

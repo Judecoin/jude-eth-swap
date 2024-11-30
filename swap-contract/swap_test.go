@@ -13,7 +13,7 @@ import (
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/stretchr/testify/require"
 
-	"github.com/noot/atomic-swap/judecoin"
+	"github.com/judecoin/atomic-swap/judecoin"
 )
 
 const (
@@ -40,10 +40,13 @@ func TestDeploySwap(t *testing.T) {
 	pk_a, err := crypto.HexToECDSA(keyAlice)
 	require.NoError(t, err)
 
+	pk_b, err := crypto.HexToECDSA(keyBob)
+	require.NoError(t, err)
+
 	authAlice, err := bind.NewKeyedTransactorWithChainID(pk_a, big.NewInt(1337)) // ganache chainID
 	require.NoError(t, err)
 
-	address, tx, swapContract, err := DeploySwap(authAlice, conn, [32]byte{}, [32]byte{})
+	address, tx, swapContract, err := DeploySwap(authAlice, conn, pk_a.X, pk_a.Y, pk_b.X, pk_b.Y)
 	require.NoError(t, err)
 
 	t.Log(address)
@@ -55,12 +58,14 @@ func TestSwap_Claim(t *testing.T) {
 	// Alice generates key
 	keyPairAlice, err := judecoin.GenerateKeys()
 	require.NoError(t, err)
-	pubKeyAlice := keyPairAlice.PublicKeyPair().SpendKey().Bytes()
+	// pubKeyAlice := keyPairAlice.PublicKeyPair().SpendKey().Bytes()
+	pubKeyAliceX, pubKeyAliceY := judecoin.PublicSpendOnSecp256k1(keyPairAlice.SpendKey())
 
 	// Bob generates key
 	keyPairBob, err := judecoin.GenerateKeys()
 	require.NoError(t, err)
-	pubKeyBob := keyPairBob.PublicKeyPair().SpendKey().Bytes()
+	pubKeyBobX, pubKeyBobY := judecoin.PublicSpendOnSecp256k1(keyPairBob.SpendKey())
+	// pubKeyBob := keyPairBob.PublicKeyPair().SpendKey().Bytes()
 
 	secretBob := keyPairBob.SpendKeyBytes()
 

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/noot/atomic-swap/judecoin"
-	"github.com/noot/atomic-swap/net"
+	"github.com/judecoin/atomic-swap/judecoin"
+	"github.com/judecoin/atomic-swap/net"
 
 	"github.com/libp2p/go-libp2p-core/peer"
 )
